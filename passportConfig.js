@@ -41,5 +41,5 @@ exports.isAuthenticated = (req, res, next) => {
     return next();
   }
 
-  res.redirect("/login");
+  res.send("Please login first.");
 };

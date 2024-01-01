@@ -1,6 +1,13 @@
 const express = require("express");
 const app = express();
 const expressSession = require("express-session");
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 
 const { connectMongoose, User } = require("./database");
 connectMongoose();
@@ -46,13 +53,9 @@ app.post("/register", async (req, res) => {
 });
 
 // Login user
-app.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/register",
-  })
-);
+app.post("/login", passport.authenticate("local"), function (req, res) {
+  res.json(req.user);
+});
 
 // get current user (Private route)
 app.get("/profile", isAuthenticated, (req, res) => {
